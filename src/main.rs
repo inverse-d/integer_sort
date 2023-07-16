@@ -22,22 +22,23 @@ fn median_of_numbers(list: &mut [i32]) -> i32 {
 }
 
 fn mode_of_numbers(list: &[i32]) -> i32 {
-    let mut map = HashMap::new();
-    for number in list {
-        let count = map.entry(number).or_insert(0);
-        *count += 1;
+    struct Highest {
+        key: i32,
+        count: i32,
     }
-    let mut mode = 0;
-    let mut max_count = 0;
-    for (number, count) in map {
-        if count > max_count {
-            mode = *number;
-            max_count = count;
+    let mut mode = HashMap::new();
+    let mut highest = Highest {key: 0, count: 0};
+    for key in list {
+        let count = mode.entry(key).or_insert(0);
+        *count += 1;
+        if *count > highest.count {
+            highest.count = *count;
+            highest.key = *key;
         }
     }
-    mode
+    highest.key
 }
-
+        
 fn main() {
     let integer_list = create_integer_list();
     let average = average_of_numbers(&integer_list);
